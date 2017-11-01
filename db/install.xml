@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/devvideo/db" VERSION="20130717" COMMENT="XMLDB file for Moodle mod/devvideo"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="devvideo" COMMENT="devvideo,moodle一个视频播放器插件">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="course"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="课程视频文件活动属于" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="实例名称" PREVIOUS="course" NEXT="intro"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="视频文件活动的一般介绍" PREVIOUS="name" NEXT="introformat"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="介绍字段的格式(MOODLE，HTML，MARKDOWN…)" PREVIOUS="intro" NEXT="width"/>
+        <FIELD NAME="width" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="800" SEQUENCE="false" COMMENT="以像素为单位的视频宽度" PREVIOUS="introformat" NEXT="height"/>
+        <FIELD NAME="height" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="500" SEQUENCE="false" COMMENT="以像素为单位的视频高度" PREVIOUS="width" NEXT="responsive"/>
+        <FIELD NAME="responsive" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="非零，如果视频应该适应窗口大小，宽度和高度用作比例" PREVIOUS="height" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="responsive" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

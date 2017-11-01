@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>获取当前播放时间的示例-ckplayer应用示例</title>
+<meta name="keywords" content="flv播放器,f4v,mp4,hlv,rtmp播放器,网页视频播放器,ckplayer官网,视频流,播放器" />
+<meta name="description" content="ckplayer(超酷网页视频播放器),支持http协议下的flv,f4v,mp4,支持rtmp视频流和rtmp视频回放，支持m3u8格式，是你做视频直播，视频点播的理想播放器 " />
+<meta name="author" content="ckplayer,超酷网页视频播放器" />
+<meta name="copyright" content="ckplayer,超酷网页视频播放器" />
+<script type="text/javascript" src="./jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/static/js/help.js"></script>
+<link href="/static/css/example.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+	/*#a1 {
+	height: 400px;
+	width: 600px;
+	}*/
+
+	#nowTime {
+	line-height: 35px;
+	background-color: #EBEBEB;
+	height: 35px;
+	}
+	/* CSS Document */
+	body, h1, h2, h3, h4, h5, h6, hr, p,
+	blockquote, /* structural elements 结构元素 */
+	dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+	pre, /* text formatting elements 文本格式元素 */
+	form, fieldset, legend, button, /* form elements 表单元素 */
+	th, td, /* table elements 表格元素 */
+	img {
+	border: medium none;
+	margin: 0;
+	padding: 0;
+	}
+
+	li, ol {
+	list-style: none;
+	vertical-align: bottom;
+	}
+
+	em {
+	font-style: normal;
+	}
+
+	img {
+	vertical-align: middle;
+	}
+
+	a, input, textarea, select, option, button, .logo, #icon_num li, #icon_num_top li, .blk_29 .LeftBotton, .blk_29 .RightBotton, #cal #cm .cell, .work_lcontent img, .work_detail img, .brow img {
+	cursor: pointer;
+	}
+
+	#mediaplayer_wrapper {
+	border: 1px solid #000;
+	margin-bottom: 35px;
+	}
+
+	.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+	}
+
+	*html .clearfix {
+	height: 1%;
+	}
+
+	* + html .clearfix {
+	height: 1%;
+	}
+
+	.clearfix {
+	display: inline-block;
+	}
+	/* Hide from IE Mac */
+	.clearfix {
+	display: block;
+	}
+
+	#playerlist a {
+	text-decoration: none;
+	outline: none;
+	color: #FFF;
+	}
+
+	#desic {
+	text-align: center;
+	padding: 10px 0;
+	width: 950px;
+	margin: 0 auto 31px;
+	color: #999;
+	}
+
+	#a1 {
+	width: 770px;
+	height: 480px;
+	float: left;
+	}
+	#a2, #a3 {
+	width: 10px;
+	height: 480px;
+	float: left;
+	background: #262626;
+	}
+	#playerlist {
+	width: 190px;
+	height: 480px;
+	overflow: auto;
+	float: left;
+	background: #262626;
+	font-size: 12px;
+	}
+
+	#playerlist li {
+	list-style: none;
+	height: 40px;
+	line-height: 40px;
+	padding-bottom: 2px;
+	border-bottom: 1px solid #333;
+	overflow: hidden;
+	padding-left: 5px;
+	}
+
+	#playerlist li:last-child {
+	border-bottom: none;
+	}
+
+	#playerlist li.crent {
+	background: #1C1C1C;
+	}
+
+	#playerlist li.crent a {
+	color: #FF7900;
+	}
+
+	#playerlist li a {
+	display: block;
+	color: #fff;
+	}
+
+	#playerlist li img {
+	vertical-align: middle;
+	height: 40px;
+	margin: 0 20px 0 0;
+	}
+
+	.bshare-custom {
+	position: absolute;
+	top: 123px;
+	right: 1px;
+	z-index: 2;
+	}
+	.mright {
+	float: left;
+	padding-left: 10px;
+	width: 234px;
+	line-height: 20px;
+	font-size: 12px;
+	}
+
+	.mright a {
+	text-decoration: none;
+	color: #06F;
+	}
+</style>
+</head>
+<body>
+<div class="top">
+<div class="top_left"><a href="http://www.ckplayer.com/">ckplayer.com</a></div>
+<div class="top_tab"><a href="http://www.ckplayer.com/">首页</a> | <a href="http://www.ckplayer.com/bbs/forum.php?mod=forumdisplay&fid=2">下载</a> | <a href="http://www.ckplayer.com/tool/">帮助手册</a> | <a href="http://www.ckplayer.com/article/19.htm">应用示例</a> | <a href="http://www.ckplayer.com/bbs/forum.php">论坛</a></div>
+</div>
+<div class="c_title">自动播放上次播放的示例</div>
+<div class="clearfix">
+<div id="a1"></div>
+<div><img src="imags/1.jpg" onclick="mm();" id="a2" title="收起列表" /></div>
+<div><img src="imags/1.jpg" onclick="mmm();" id="a3" style="display:none" title="展开列表" /></div>
+<ul id="playerlist">
+<li id="vli_0" onclick="playvideo(0)"><img src="images/1.jpg">霍比特人</li>
+<li id="vli_1" onclick="playvideo(1)"><img src="images/2.jpg">海洋</li>
+<li id="vli_2" onclick="playvideo(2)"><img src="images/3.jpg">快乐的大脚</li>
+<li id="vli_3" onclick="playvideo(3)"><img src="images/4.jpg">超凡蜘蛛侠2</li>
+<li id="vli_0" onclick="playvideo(0)"><img src="images/1.jpg">霍比特人</li>
+<li id="vli_1" onclick="playvideo(1)"><img src="images/2.jpg">海洋</li>
+<li id="vli_2" onclick="playvideo(2)"><img src="images/3.jpg">快乐的大脚</li>
+<li id="vli_3" onclick="playvideo(3)"><img src="images/4.jpg">超凡蜘蛛侠2</li>
+<li id="vli_0" onclick="playvideo(0)"><img src="images/1.jpg">霍比特人</li>
+<li id="vli_1" onclick="playvideo(1)"><img src="images/2.jpg">海洋</li>
+<li id="vli_2" onclick="playvideo(2)"><img src="images/3.jpg">快乐的大脚</li>
+<li id="vli_3" onclick="playvideo(3)"><img src="images/4.jpg">超凡蜘蛛侠2</li>
+</ul>
+</div>
+
+<!--<script type="text/javascript" src="/ckplayer/6.6/ckplayer.js"></script>-->
+<script src="./ckplayer/ckplayer.js"></script>
+<script type="text/javascript">
+function loadedHandler() {
+if (CKobject.getObjectById('ckplayer_a1').getType()) {
+CKobject.getObjectById('ckplayer_a1').videoPlay();
+//CKobject.getObjectById('ckplayer_a1').addListener('play', playHandler);
+}
+else {
+CKobject.getObjectById('ckplayer_a1').videoPlay();
+//CKobject.getObjectById('ckplayer_a1').addListener('play', 'playHandler');
+}
+}
+function playerstop() {
+setTimeend();
+CKobject.getObjectById('ckplayer_a1').videoPlay();
+//alert('播放结束，正在播放结束广告');
+}
+function setTimeend() {//后置广告倒计时
+nowD++;
+if (nowD >= videoarr.length - 1) {
+nowD = 0;
+}
+playvideo(nowD);
+}
+function mm() {
+CKobject._K_('a2').style.display = 'none';
+CKobject._K_('playerlist').style.display = 'none';
+CKobject._K_('a3').style.display = 'block';
+CKobject._K_('a1').style.width = '970px';
+CKobject.getObjectById('ckplayer_a1').width = 970;
+//alert("dddd");
+}
+function mmm() {
+CKobject._K_('a2').style.display = 'block';
+CKobject._K_('playerlist').style.display = 'block';
+CKobject._K_('a3').style.display = 'none';
+CKobject._K_('a1').style.width = '770px';
+CKobject.getObjectById('ckplayer_a1').width = 770;
+//alert("dddd");
+}
+var nowD = 0;//目前播放的视频的编号(在数组里的编号)
+var frontTime = false;//前置广告倒计时是否在运行中
+var frontHtime = false;//后置广告是否在进行中
+var videoarr = new Array();//新建一个数组来存flash端视频地址，添加方法就像下面一样
+videoarr.push('http://movie.ks.js.cn/flv/2012/02/6-3.flv');
+videoarr.push('http://movie.ks.js.cn/flv/2012/02/6-1.flv');
+videoarr.push('http://movie.ks.js.cn/flv/2011/11/8-1.flv');
+videoarr.push('http://movie.ks.js.cn/flv/2014/04/24-2.flv');
+var html5arr = new Array();//新建一个数组来保存HTML5端用到的视频地址，注意，因为本演示只有一种mp4文件，所以html5下所有用到的视频地址都是相同的，请见谅，另外，该数组是一个二维数组
+html5arr.push(['http://movie.ks.js.cn/flv/other/1_0.mp4->video/mp4']);
+html5arr.push(['http://movie.ks.js.cn/flv/other/1_0.mp4->video/mp4']);
+html5arr.push(['http://movie.ks.js.cn/flv/other/1_0.mp4->video/mp4']);
+html5arr.push(['http://movie.ks.js.cn/flv/other/1_0.mp4->video/mp4']);
+function playvideo(n) {
+nowD = n;
+var flashvars = {
+f: videoarr[n],
+c: 0,
+p: 2,
+//b: 0,
+e: 0,
+//i: '/static/images/letitgo.jpg',
+loaded: 'loadedHandler',
+my_url: encodeURIComponent(window.location.href)
+};
+for (i = 0; i < videoarr.length; i++) {//这里是用来改变右边列表背景色
+if (i != nowD) {
+CKobject._K_('vli_' + i).style.backgroundColor = '#262626';
+}
+else {
+CKobject._K_('vli_' + i).style.backgroundColor = '#DAF2FF';
+}
+}
+
+var video = ['http://movie.ks.js.cn/flv/other/1_0.mp4->video/mp4'];
+//CKobject.embed('../flash/ckplayer/ckplayer.swf', 'a1', 'ckplayer_a1', '100%', '100%', false, flashvars, video);
+CKobject.embed('./ckplayer/ckplayer.swf', 'a1', 'ckplayer_a1', '100%', '100%', false, flashvars, html5arr[n]);
+
+}
+// CKobject.embed('/ckplayer/6.6/ckplayer.swf','a1','ckplayer_a1','100%','100%',false,flashvars,video);
+playvideo(0);
+</script>
+<div class="explain_title">相关代码及说明</div>
+<div class="exp">
+原理：主要用css把列表框给显示出来，然后把所需要的路径给传给列表框，可以自动进行播放。
+</div>
+</body>
+
+</html>
